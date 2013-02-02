@@ -33,13 +33,24 @@
  */
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARATOR.'class.phpmailer.php');
 
-/**
- * Define the name of the config file
- */
-define('CONFIG_FILE','mail.php');
 
 class YiiMailer extends PHPMailer {
 	
+	/**
+	 * Sets the CharSet of the message.
+	 * @var string
+	 */
+	public $CharSet='UTF-8';
+	
+	/**
+	 * Sets the text-only body of the message.
+	 * @var string
+	 */
+	public $AltBody='';
+	
+	/**
+	 * Default paths and private properties
+	 */
 	private $viewPath='application.views.mail';
 	
 	private $layoutPath='application.views.mail.layouts';
@@ -52,18 +63,27 @@ class YiiMailer extends PHPMailer {
 	
 	private $data;
 	
-	public $CharSet='UTF-8';
-	
-	public $AltBody='';
+	/**
+	 * Constants
+	 */
+	const CONFIG_FILE='mail.php'; //Define the name of the config file
+
+	const CONFIG_PARAMS='YiiMailer'; //Define the key of the Yii params for the config array
 	
 	/**
 	 * Set and configure initial parameters
-	 * @param string $layout Layout file
+	 * @param string $view View name
+	 * @param array $data Data array
+	 * @param string $layout Layout name
 	 */
 	public function __construct($view='', $data=array(), $layout='')
 	{
 		//initialize config
-		$config=require(Yii::getPathOfAlias('application.config').DIRECTORY_SEPARATOR.CONFIG_FILE);
+		if(isset(Yii::app()->params[self::CONFIG_PARAMS]))
+			$config=Yii::app()->params[self::CONFIG_PARAMS];
+		else
+			$config=require(Yii::getPathOfAlias('application.config').DIRECTORY_SEPARATOR.self::CONFIG_FILE);
+		//set config
 		$this->setConfig($config);
 		//set view
 		$this->setView($view);
