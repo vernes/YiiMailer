@@ -28,8 +28,8 @@ $mail = new YiiMailer('contact', array('message' => 'Message to send', 'name' =>
 or
 <pre>
 $mail = new YiiMailer();
-$mail -> setView('contact');
-$mail -> setData(array('message' => 'Message to send', 'name' => 'John Doe', 'description' => 'Contact form'));
+$mail->setView('contact');
+$mail->setData(array('message' => 'Message to send', 'name' => 'John Doe', 'description' => 'Contact form'));
 </pre>
 Layout is automatically set from config but you may override it with $mail->setLayout('layoutName')
 
@@ -55,4 +55,4 @@ if ($mail->Send()) {
 
 ## Examples
 
-Two examples included: one for standard contact form in yii webb app and the other one for yii console app.
+Two examples included: one for standard contact form in yii web app and the other one for yii console app.
