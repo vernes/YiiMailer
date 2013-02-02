@@ -23,7 +23,7 @@
  * @author Vernes Šiljegović
  * @copyright  Copyright (c) 2013 YiiMailer
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version 1.0, 2013-01-02
+ * @version 1.1, 2013-02-02
  */
 
 
@@ -93,12 +93,12 @@ class YiiMailer extends PHPMailer {
 	 * @param string $view View file
 	 * @throws CException 
 	 */
-	private function setView($view)
+	public function setView($view)
 	{
 		if($view!='')
 		{
-			if(!is_file(Yii::app()->controller->getViewFile($this->viewPath.'.'.$view)))
-				throw new CException('View '.$view.' not found');
+			if(!is_file($this->getViewFile($this->viewPath.'.'.$view)))
+				throw new CException('View "'.$view.'" not found');
 			$this->view=$view;
 		}
 	}
@@ -116,7 +116,7 @@ class YiiMailer extends PHPMailer {
 	 * Send data to be used in mail body
 	 * @param array $data Data array
 	 */
-	private function setData($data)
+	public function setData($data)
 	{
 		$this->data=$data;
 	}
@@ -139,8 +139,8 @@ class YiiMailer extends PHPMailer {
 	{
 		if($layout!='')
 		{
-			if(!is_file(Yii::app()->controller->getViewFile($this->layoutPath.'.'.$layout)))
-				throw new CException('Layout '.$layout.' not found!');
+			if(!is_file($this->getViewFile($this->layoutPath.'.'.$layout)))
+				throw new CException('Layout "'.$layout.'" not found!');
 			$this->layout=$layout;
 		}
 	}
@@ -162,7 +162,7 @@ class YiiMailer extends PHPMailer {
 	public function setViewPath($path)
 	{
 		if (!is_string($path) && !preg_match("/[a-z0-9\.]/i",$path))
-			throw new CException('Path '.$path.' not valid!');
+			throw new CException('Path "'.$path.'" not valid!');
 		$this->viewPath=$path;
 	}
 	
@@ -183,7 +183,7 @@ class YiiMailer extends PHPMailer {
 	public function setLayoutPath($path)
 	{
 		if (!is_string($path) && !preg_match("/[a-z0-9\.]/i",$path))
-			throw new CException('Path '.$path.' not valid!');
+			throw new CException('Path "'.$path.'" not valid!');
 		$this->layoutPath=$path;
 	}
 	
@@ -204,7 +204,7 @@ class YiiMailer extends PHPMailer {
 	public function setBaseDirPath($path)
 	{
 		if (!is_string($path) && !preg_match("/[a-z0-9\.]/i",$path))
-			throw new CException('Path '.$path.' not valid!');
+			throw new CException('Path "'.$path.'" not valid!');
 		$this->baseDirPath=$path;
 	}
 	
@@ -218,12 +218,63 @@ class YiiMailer extends PHPMailer {
 	}
 	
 	/**
+	 * Find the view file for the given view name
+	 * @param string $viewName Name of the view
+	 * @return string The file path or false if the file does not exist
+	 */
+	public function getViewFile($viewName)
+	{
+		//In web application, use existing method
+		if(isset(Yii::app()->controller))
+			return Yii::app()->controller->getViewFile($viewName);
+		//resolve the view file
+		//TODO: support for themes in console applications
+		if(empty($viewName))
+			return false;
+		
+		$viewFile=Yii::getPathOfAlias($viewName);
+		if(is_file($viewFile.'.php'))
+			return Yii::app()->findLocalizedFile($viewFile.'.php');
+		else
+			return false;
+	}
+	
+	/**
+	 * Render the view file
+	 * @param string $viewName Name of the view
+	 * @param array $viewData Data for extraction
+	 * @return string The rendered result
+	 * @throws CException
+	 */
+	public function renderView($viewName,$viewData=null)
+	{
+		//resolve the file name
+		if(($viewFile=$this->getViewFile($viewName))!==false)
+		{
+			//use controller instance if available or create dummy controller for console applications
+			if(isset(Yii::app()->controller))
+				$controller=Yii::app()->controller;
+			else
+				$controller=new CController(__CLASS__);
+
+			//render and return the result
+			return $controller->renderInternal($viewFile,$viewData,true);
+		}
+		else
+		{
+			//file name does not exist
+			throw new CException('View "'.$viewName.'" does not exist!');
+		}
+		
+	}
+
+	/**
 	 * Generates HTML email, with or without layout
 	 */
 	public function render()
 	{
 		//render body
-		$body=Yii::app()->controller->renderPartial($this->viewPath.'.'.$this->view, $this->data, true);
+		$body=$this->renderView($this->viewPath.'.'.$this->view, $this->data);
 		if($this->layout)
 		{
 			//has layout
@@ -241,9 +292,9 @@ class YiiMailer extends PHPMailer {
 	 * @param string $message Email message
 	 * @param string $basedir Path for images to embed in message
 	 */
-	public function MsgHTMLWithLayout($message, $basedir = '')
+	protected function MsgHTMLWithLayout($message, $basedir = '')
 	{
-		$this->MsgHTML(Yii::app()->controller->renderPartial($this->layoutPath.'.'.$this->layout, array('content'=>$message,'data'=>$this->data), true), $basedir);
+		$this->MsgHTML($this->renderView($this->layoutPath.'.'.$this->layout, array('content'=>$message,'data'=>$this->data)), $basedir);
 	}
 	
 }
