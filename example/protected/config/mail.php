@@ -3,6 +3,8 @@ return array(
     'viewPath' => 'application.views.mail',
     'layoutPath' => 'application.views.layouts',
     'baseDirPath' => 'webroot.images.mail',
+    'savePath' => 'webroot.assets.mail',
+    'testMode' => false,
     'layout' => 'mail',
     'CharSet' => 'UTF-8',
     'AltBody' => Yii::t('YiiMailer','You need an HTML capable viewer to read this message.'),

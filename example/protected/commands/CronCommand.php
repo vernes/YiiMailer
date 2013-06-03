@@ -11,23 +11,21 @@ class CronCommand extends CConsoleCommand
 		//Do some cron processing...
 		$cronResult="Cron job finished successfuly";
 		
-		$mail = new YiiMailer();
+		$mail = new YiiMailer;
 		//use "cron" view from views/mail
 		$mail->setView('cron');
 		$mail->setData(array('message' => $cronResult, 'name' => get_class($this), 'description' => 'Cron job', 'mailer' => $mail));
-		//render HTML mail, layout is set from config file or with $mail->setLayout('layoutName')
-		$mail->render();
-		//set properties as usually with PHPMailer
-		$mail->From = 'from@example.com';
-		$mail->FromName = 'Console application';
-		$mail->Subject = $cronResult;
-		$mail->AddAddress('to@example.com');
+		
+		//set properties
+		$mail->setFrom('from@example.com', 'Console application');
+		$mail->setSubject($cronResult);
+		$mail->setTo('to@example.com');
+		$mail->setAttachment(Yii::getPathOfAlias('webroot.files') . '/yii-1.1.0-validator-cheatsheet.pdf');
 		//send
-		if ($mail->Send()) {
-			$mail->ClearAddresses();
+		if ($mail->send()) {
 			echo 'Mail sent successfuly';
 		} else {
-			echo 'Error while sending email: '.$mail->ErrorInfo;
+			echo 'Error while sending email: '.$mail->getError();
 		}
 		echo PHP_EOL;
 	}
