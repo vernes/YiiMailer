@@ -29,12 +29,6 @@
 
 
 
-/**
- * Include the the PHPMailer class.
- */
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARATOR.'class.phpmailer.php');
-
-
 class YiiMailer extends PHPMailer {
 	
 	/**
