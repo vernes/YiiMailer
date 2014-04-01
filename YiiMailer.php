@@ -4,7 +4,7 @@
  * Yii extension for sending emails using views and layouts
  * https://github.com/vernes/YiiMailer
  * Copyright (c) 2013 YiiMailer
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -36,45 +36,45 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARAT
 
 
 class YiiMailer extends PHPMailer {
-	
+
 	/**
 	 * Sets the CharSet of the message.
 	 * @var string
 	 */
 	public $CharSet='UTF-8';
-	
+
 	/**
 	 * Sets the text-only body of the message.
 	 * @var string
 	 */
 	public $AltBody='';
-	
+
 	/**
 	 * Default paths and private properties
 	 */
 	private $viewPath='application.views.mail';
-	
+
 	private $layoutPath='application.views.mail.layouts';
-	
+
 	private $baseDirPath='webroot.images.mail';
 
 	private $testMode=false;
 
 	private $savePath='webroot.assets.mail';
-	
+
 	private $layout;
-	
+
 	private $view;
-	
+
 	private $data;
-	
+
 	/**
 	 * Constants
 	 */
 	const CONFIG_FILE='mail.php'; //Define the name of the config file
 
 	const CONFIG_PARAMS='YiiMailer'; //Define the key of the Yii params for the config array
-	
+
 	/**
 	 * Set and configure initial parameters
 	 * @param string $view View name
@@ -97,11 +97,11 @@ class YiiMailer extends PHPMailer {
 		//set layout
 		$this->setLayout($layout);
 	}
-	
+
 	/**
 	 * Configure parameters
 	 * @param array $config Config parameters
-	 * @throws CException 
+	 * @throws CException
 	 */
 	private function setConfig($config)
 	{
@@ -112,11 +112,11 @@ class YiiMailer extends PHPMailer {
 			$this->$key=$val;
 		}
 	}
-	
+
 	/**
 	 * Set the view to be used
 	 * @param string $view View file
-	 * @throws CException 
+	 * @throws CException
 	 */
 	public function setView($view)
 	{
@@ -127,7 +127,7 @@ class YiiMailer extends PHPMailer {
 			$this->view=$view;
 		}
 	}
-	
+
 	/**
 	 * Get currently used view
 	 * @return string View filename
@@ -136,7 +136,7 @@ class YiiMailer extends PHPMailer {
 	{
 		return $this->view;
 	}
-	
+
 	/**
 	 * Clear currently used view
 	 */
@@ -153,7 +153,7 @@ class YiiMailer extends PHPMailer {
 	{
 		$this->data=$data;
 	}
-	
+
 	/**
 	 * Get current data array
 	 * @return array Data array
@@ -162,7 +162,7 @@ class YiiMailer extends PHPMailer {
 	{
 		return $this->data;
 	}
-	
+
 	/**
 	 * Clear current data array
 	 */
@@ -170,11 +170,11 @@ class YiiMailer extends PHPMailer {
 	{
 		$this->data=array();
 	}
-	
+
 	/**
 	 * Set layout file to be used
 	 * @param string $layout Layout filename
-	 * @throws CException 
+	 * @throws CException
 	 */
 	public function setLayout($layout)
 	{
@@ -185,7 +185,7 @@ class YiiMailer extends PHPMailer {
 			$this->layout=$layout;
 		}
 	}
-	
+
 	/**
 	 * Get current layout
 	 * @return string Layout filename
@@ -194,7 +194,7 @@ class YiiMailer extends PHPMailer {
 	{
 		return $this->layout;
 	}
-	
+
 	/**
 	 * Clear current layout
 	 */
@@ -206,7 +206,7 @@ class YiiMailer extends PHPMailer {
 	/**
 	 * Set path for email views
 	 * @param string $path Yii path
-	 * @throws CException 
+	 * @throws CException
 	 */
 	public function setViewPath($path)
 	{
@@ -214,20 +214,20 @@ class YiiMailer extends PHPMailer {
 			throw new CException('Path "'.$path.'" not valid!');
 		$this->viewPath=$path;
 	}
-	
+
 	/**
 	 * Get path for email views
-	 * @return string Yii path 
+	 * @return string Yii path
 	 */
 	public function getViewPath()
 	{
 		return $this->viewPath;
 	}
-	
+
 	/**
 	 * Set path for email layouts
 	 * @param string $path Yii path
-	 * @throws CException 
+	 * @throws CException
 	 */
 	public function setLayoutPath($path)
 	{
@@ -235,20 +235,20 @@ class YiiMailer extends PHPMailer {
 			throw new CException('Path "'.$path.'" not valid!');
 		$this->layoutPath=$path;
 	}
-	
+
 	/**
 	 * Get path for email layouts
-	 * @return string Yii path 
+	 * @return string Yii path
 	 */
 	public function getLayoutPath()
 	{
 		return $this->layoutPath;
 	}
-	
+
 	/**
 	 * Set path for images to embed in email messages
 	 * @param string $path Yii path
-	 * @throws CException 
+	 * @throws CException
 	 */
 	public function setBaseDirPath($path)
 	{
@@ -256,16 +256,16 @@ class YiiMailer extends PHPMailer {
 			throw new CException('Path "'.$path.'" not valid!');
 		$this->baseDirPath=$path;
 	}
-	
+
 	/**
 	 * Get path for email images
-	 * @return string Yii path 
+	 * @return string Yii path
 	 */
 	public function getBaseDirPath()
 	{
 		return $this->baseDirPath;
 	}
-	
+
 	/**
 	 * Set From address and name
 	 * @param string $address Email address of the sender
@@ -280,7 +280,7 @@ class YiiMailer extends PHPMailer {
 
 	/**
 	 * Set one or more email addresses to send to
-	 * Valid arguments: 
+	 * Valid arguments:
 	 * $mail->setTo('john@example.com');
 	 * $mail->setTo(array('john@example.com','jane@example.com'));
 	 * $mail->setTo(array('john@example.com'=>'John Doe','jane@example.com'));
@@ -372,7 +372,7 @@ class YiiMailer extends PHPMailer {
 
 	/**
 	 * Set one or more email attachments
-	 * Valid arguments: 
+	 * Valid arguments:
 	 * $mail->setAttachment('something.pdf');
 	 * $mail->setAttachment(array('something.pdf','something_else.pdf','another.doc'));
 	 * $mail->setAttachment(array('something.pdf'=>'Some file','something_else.pdf'=>'Another file'));
@@ -415,7 +415,7 @@ class YiiMailer extends PHPMailer {
 	{
 		return $this->ErrorInfo;
 	}
-	
+
 	/**
 	 * Find the view file for the given view name
 	 * @param string $viewName Name of the view
@@ -430,14 +430,14 @@ class YiiMailer extends PHPMailer {
 		//TODO: support for themes in console applications
 		if(empty($viewName))
 			return false;
-		
+
 		$viewFile=Yii::getPathOfAlias($viewName);
 		if(is_file($viewFile.'.php'))
 			return Yii::app()->findLocalizedFile($viewFile.'.php');
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Render the view file
 	 * @param string $viewName Name of the view
@@ -464,7 +464,7 @@ class YiiMailer extends PHPMailer {
 			//file name does not exist
 			throw new CException('View "'.$viewName.'" does not exist!');
 		}
-		
+
 	}
 
 	/**
@@ -475,7 +475,7 @@ class YiiMailer extends PHPMailer {
 		//render view as body if specified
 		if(isset($this->view))
 			$this->setBody($this->renderView($this->viewPath.'.'.$this->view, $this->data));
-		
+
 		//render with layout if given
 		if($this->layout)
 		{
@@ -488,7 +488,7 @@ class YiiMailer extends PHPMailer {
 			$this->MsgHTML($this->Body, Yii::getPathOfAlias($this->baseDirPath));
 		}
 	}
-	
+
 	/**
 	 * Render HTML email message with layout
 	 * @param string $message Email message
@@ -507,7 +507,7 @@ class YiiMailer extends PHPMailer {
 	{
 		//render message
 		$this->render();
-		
+
 		//send the message
 		try{
 			//prepare the message
@@ -537,9 +537,18 @@ class YiiMailer extends PHPMailer {
 	{
 		$filename = date('YmdHis') . '_' . uniqid() . '.eml';
 		$dir = Yii::getPathOfAlias($this->savePath);
-		//check if dir exists and is writable
-		if(!is_writable($dir))
-			throw new CException('Directory "'.$dir.'" does not exist or is not writable!');
+
+		// Create a directory
+		if(!is_dir($dir))
+		{
+			$oldmask = @umask(0);
+			$result = @mkdir($dir, 0777);
+			@umask($oldmask);
+			if (!$result)
+			{
+				throw new CException('Unable to create the directory '.$dir);
+			}
+		}
 
 		try {
 			$file = fopen($dir . DIRECTORY_SEPARATOR . $filename,'w+');
