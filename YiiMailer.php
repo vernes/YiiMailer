@@ -563,4 +563,18 @@ class YiiMailer extends PHPMailer {
 		}
 	}
 
+	public function getTo()
+	{
+		return $this->to;
+	}
+
+	public function getCC()
+	{
+		return $this->cc;
+	}
+
+	public function getBcc()
+	{
+		return $this->bcc;
+	}
 }
