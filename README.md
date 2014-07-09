@@ -4,7 +4,7 @@ Yii extension for sending emails with layouts using [PHPMailer](https://github.c
 
 ## Features
 
-* Based on latest PHPMailer (version 5.2.6 bundled)
+* Based on latest PHPMailer (version 5.2.8 bundled)
 * Supports Yii layouts and translation
 * Supports web and console applications
 * Send full HTML emails with embedded images
@@ -19,6 +19,15 @@ Yii extension for sending emails with layouts using [PHPMailer](https://github.c
 4. Create email layout file mail.php in protected/views/layouts/ (default path, can be changed in config)
 5. Create all the views you want to use in protected/views/mail/ (default path, can be changed in config)
 6. Put all images you want to embed in emails in images/mail/ (default path, can be changed in config)
+
+### Note
+In console apps, alias 'webroot' may not be the same as in web apps. See https://github.com/yiisoft/yii/issues/1267.
+Best workaround is to set alias you need directly in config/console.php, e.g.: 
+<pre>
+Yii::setPathOfAlias('webroot.images.mail', '/path/to/your/images/mail/dir');
+</pre>
+
+Yet another solution is to override protected/yiic.php and set 'webroot' alias there (see example files).
 
 ## Usage
 
@@ -98,6 +107,26 @@ To use test mode, you must specify path to directory where you want to save your
 </pre>
 
 Emails are saved as .eml files and you can use software like Mozilla Thunderbird to open them.
+
+
+### Using SMTP
+
+If you want to use SMTP, configure appropriate properties in your config.
+Example setup for GMail:
+<pre>
+	'Mailer' => 'smtp',
+	'Host' => 'smtp.gmail.com',
+	'Port' => 465,
+	'SMTPSecure' => 'ssl',
+	'SMTPAuth' => true,
+	'Username' => 'your_email@gmail.com',
+	'Password' => 'your_password',
+</pre>
+
+You may also configure this just before sending email:
+<pre>
+$mail->setSmtp('smtp.gmail.com', 465, 'ssl', true, 'your_email@gmail.com', 'your_password');
+</pre>
 
 ## Examples
 

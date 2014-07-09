@@ -21,6 +21,8 @@ class CronCommand extends CConsoleCommand
 		$mail->setSubject($cronResult);
 		$mail->setTo('to@example.com');
 		$mail->setAttachment(Yii::getPathOfAlias('webroot.files') . '/yii-1.1.0-validator-cheatsheet.pdf');
+		//if you want to use SMTP, configure it in config file or use something like:
+		$mail->setSmtp('smtp.gmail.com', 465, 'ssl', true, 'your_email@gmail.com', 'your_password'); // GMail example
 		//send
 		if ($mail->send()) {
 			echo 'Mail sent successfuly';

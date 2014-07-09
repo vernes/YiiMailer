@@ -3,7 +3,7 @@
  * YiiMailer class - wrapper for PHPMailer
  * Yii extension for sending emails using views and layouts
  * https://github.com/vernes/YiiMailer
- * Copyright (c) 2013 YiiMailer
+ * Copyright (c) 2014 YiiMailer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,17 +22,17 @@
  *
  * @package YiiMailer
  * @author Vernes Šiljegović
- * @copyright  Copyright (c) 2013 YiiMailer
+ * @copyright  Copyright (c) 2014 YiiMailer
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version 1.5, 2013-06-03
+ * @version 1.6, 2014-07-09
  */
 
 
 
 /**
- * Include the the PHPMailer class.
+ * Include the the PHPMailer autoloader.
  */
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARATOR.'class.phpmailer.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARATOR.'PHPMailerAutoload.php');
 
 
 class YiiMailer extends PHPMailer {
@@ -52,21 +52,21 @@ class YiiMailer extends PHPMailer {
 	/**
 	 * Default paths and private properties
 	 */
-	private $viewPath='application.views.mail';
+	protected $viewPath='application.views.mail';
 
-	private $layoutPath='application.views.mail.layouts';
+	protected $layoutPath='application.views.mail.layouts';
 
-	private $baseDirPath='webroot.images.mail';
+	protected $baseDirPath='webroot.images.mail';
 
-	private $testMode=false;
+	protected $testMode=false;
 
-	private $savePath='webroot.assets.mail';
+	protected $savePath='webroot.assets.mail';
 
-	private $layout;
+	protected $layout;
 
-	private $view;
+	protected $view;
 
-	private $data;
+	protected $data;
 
 	/**
 	 * Constants
@@ -562,19 +562,24 @@ class YiiMailer extends PHPMailer {
 			return false;
 		}
 	}
-
-	public function getTo()
+	
+	/**
+	 * Setup SMTP and use it to send email
+	 * @param string $host SMTP hosts, either a single hostname or multiple semicolon-delimited hostnames
+	 * @param int $port The default SMTP server port
+	 * @param string $secure The secure connection prefix. Options: "", "ssl" or "tls"
+	 * @param boolean $auth Whether to use SMTP authentication
+	 * @param string $username SMTP username
+	 * @param string $password SMTP password
+	 */
+	public function setSmtp($host='localhost',$port=25, $secure='', $auth=false, $username='', $password='')
 	{
-		return $this->to;
-	}
-
-	public function getCC()
-	{
-		return $this->cc;
-	}
-
-	public function getBcc()
-	{
-		return $this->bcc;
+		$this->isSMTP();
+		$this->Host = $host;
+		$this->Port = $port;
+		$this->SMTPSecure = $secure;
+		$this->SMTPAuth = $auth;
+		$this->Username = $username;
+		$this->Password = $password;
 	}
 }
