@@ -452,12 +452,11 @@ class YiiMailer extends PHPMailer {
 		{
 			//use controller instance if available or create dummy controller for console applications
 			if(isset(Yii::app()->controller))
-				$controller=Yii::app()->controller;
-			else
-				$controller=new CController(__CLASS__);
-
-			//render and return the result
-			return $controller->renderFile($viewFile,$viewData,true);
+                return Yii::app()->controller->renderFile($viewFile,$viewData,true);
+			else {
+                $controller = new CController(__CLASS__);
+                return $controller->renderInternal($viewFile,$viewData,true);
+            }
 		}
 		else
 		{
