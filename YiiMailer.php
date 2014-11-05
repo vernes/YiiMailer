@@ -457,7 +457,7 @@ class YiiMailer extends PHPMailer {
 				$controller=new CController(__CLASS__);
 
 			//render and return the result
-			return $controller->renderFile($viewFile,$viewData,true);
+			return $controller->renderInternal($viewFile,$viewData,true);
 		}
 		else
 		{
