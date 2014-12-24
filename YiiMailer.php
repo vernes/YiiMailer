@@ -534,7 +534,7 @@ class YiiMailer extends PHPMailer {
 	 */
 	public function save()
 	{
-		$filename = date('YmdHis') . '_' . uniqid() . '.eml';
+		$filename = date('YmdHis') . '_' . (empty($this->view) ? uniqid() : $this->view) . '.eml';
 		$dir = Yii::getPathOfAlias($this->savePath);
 
 		// Create a directory
