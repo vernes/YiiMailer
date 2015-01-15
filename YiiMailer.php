@@ -80,8 +80,9 @@ class YiiMailer extends PHPMailer {
 	 * @param string $view View name
 	 * @param array $data Data array
 	 * @param string $layout Layout name
+	 * @param boolean $model Test mode value
 	 */
-	public function __construct($view='', $data=array(), $layout='')
+	public function __construct($view='', $data=array(), $layout='', $mode='')
 	{
 		//initialize config
 		if(isset(Yii::app()->params[self::CONFIG_PARAMS]))
@@ -96,6 +97,8 @@ class YiiMailer extends PHPMailer {
 		$this->setData($data);
 		//set layout
 		$this->setLayout($layout);
+		//set testMode
+        	$this->setTestMode($mode);
 	}
 
 	/**
@@ -581,4 +584,16 @@ class YiiMailer extends PHPMailer {
 		$this->Username = $username;
 		$this->Password = $password;
 	}
+	
+	/**
+	 * Set testMode parameter
+	 * @param boolean $mode
+	 */
+	public function setMode($mode)
+	{
+		if (is_bool($mode)) {
+			$this->testMode = $mode;
+		}
+	}
+	
 }
