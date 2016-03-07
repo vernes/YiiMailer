@@ -66,6 +66,8 @@ class YiiMailer extends PHPMailer {
 
 	protected $view;
 
+	protected $textView;
+
 	protected $data;
 
 	/**
@@ -114,28 +116,63 @@ class YiiMailer extends PHPMailer {
 	}
 
 	/**
-	 * Set the view to be used
-	 * @param string $view View file
-	 * @throws CException
-	 */
-	public function setView($view)
+     * Set the view to be used
+     * @param string $view View file
+     * @param string $type The view type: 'HTML' or 'Text'
+     * @throws CException
+     */
+	public function setView($view, $type="HTML")
 	{
-		if($view!='')
+		if(!empty($view))
 		{
-			if(!is_file($this->getViewFile($this->viewPath.'.'.$view)))
-				throw new CException('View "'.$view.'" not found');
-			$this->view=$view;
+            if(!is_file($this->getViewFile($this->viewPath.'.'.$view)))
+                throw new CException('View "'.$view.'" not found');
+
+            switch($type) {
+                case "HTML":
+                    $this->view=$view;
+                    break;
+                case "Text":
+                    $this->textView=$view;
+            }
 		}
 	}
 
 	/**
 	 * Get currently used view
-	 * @return string View filename
+	 * @return string HTML View filename
 	 */
 	public function getView()
 	{
 		return $this->view;
 	}
+
+	/**
+	 * Set the HTML view to be used
+	 * @param string $view HTML View file
+	 */
+	public function setHTMLView($view)
+    {
+        $this->setView($view, "HTML");
+    }
+
+	/**
+	 * Set the HTML view to be used
+	 * @param string $view Text View file
+	 */
+    public function setTextView($view)
+    {
+        $this->setView($view, "Text");
+    }
+
+	/**
+	 * Get currently used text view
+	 * @return string Text View filename
+	 */
+    public function getTextView()
+    {
+        $this->textView;
+    }
 
 	/**
 	 * Clear currently used view
@@ -486,6 +523,10 @@ class YiiMailer extends PHPMailer {
 			//no layout
 			$this->MsgHTML($this->Body, Yii::getPathOfAlias($this->baseDirPath));
 		}
+
+		//render alt body if specified
+        if(isset($this->textView))
+            $this->AltBody = $this->renderView($this->viewPath.'.'.$this->textView, $this->data);
 	}
 
 	/**
@@ -561,7 +602,7 @@ class YiiMailer extends PHPMailer {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Setup SMTP and use it to send email
 	 * @param string $host SMTP hosts, either a single hostname or multiple semicolon-delimited hostnames
