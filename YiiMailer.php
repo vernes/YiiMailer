@@ -68,7 +68,7 @@ class YiiMailer extends PHPMailer {
 
     protected $textView;
 
-	protected $altText;
+    protected $altText;
 
     protected $data;
 
