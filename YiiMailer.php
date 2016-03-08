@@ -68,6 +68,8 @@ class YiiMailer extends PHPMailer {
 
     protected $textView;
 
+	protected $altText;
+
     protected $data;
 
     /**
@@ -157,7 +159,7 @@ class YiiMailer extends PHPMailer {
     }
 
     /**
-     * Set the HTML view to be used
+     * Set the Text view to be used
      * @param string $view Text View file
      */
     public function setTextView($view)
@@ -181,6 +183,24 @@ class YiiMailer extends PHPMailer {
     {
         $this->view=null;
     }
+
+	/**
+	 * Set the alt body text to be applied to $AltBody
+	 * @param string $text
+	 */
+	public function setAltText($text = '')
+	{
+		$this->altText = $text;
+	}
+
+	/**
+	 * Get the alt body text to be applied to $AltBody
+	 * @return string the text to be applied to $altBody
+	 */
+	public function getAltText()
+ 	{
+ 		$this->altText;
+ 	}
 
     /**
      * Send data to be used in mail body
@@ -526,7 +546,13 @@ class YiiMailer extends PHPMailer {
 
         //render alt body if specified
         if(isset($this->textView))
-            $this->AltBody = $this->renderView($this->viewPath.'.'.$this->textView, $this->data);
+		{
+			$this->AltBody = $this->renderView($this->viewPath.'.'.$this->textView, $this->data);
+		}
+		elseif (isset($this->altText))
+		{
+			$this->AltBody = $this->altText;
+		}
     }
 
     /**
