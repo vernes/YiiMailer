@@ -28,12 +28,6 @@
  */
 
 
-/**
- * Include the the PHPMailer autoloader.
- */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PHPMailer' . DIRECTORY_SEPARATOR . 'PHPMailerAutoload.php');
-
-
 class YiiMailer extends PHPMailer
 {
 
