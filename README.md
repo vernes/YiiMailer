@@ -1,10 +1,10 @@
 # YiiMailer
 
-Yii extension for sending emails with layouts using [PHPMailer](https://github.com/PHPMailer/PHPMailer)
+Yii (v1.1.x) extension for sending emails with layouts using [PHPMailer](https://github.com/PHPMailer/PHPMailer)
 
 ## Features
 
-* Based on latest PHPMailer (version 5.2.8 bundled)
+* Based on PHPMailer (bundled, use branch 'composer' for composer support)
 * Supports Yii layouts and translation
 * Supports web and console applications
 * Send full HTML emails with embedded images
