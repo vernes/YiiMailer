@@ -1,8 +1,9 @@
 {
 	"name": "rdewilde/yiimailer",
 	"description": "Yii extension for sending emails with layouts using PHPMailer",
+	"type": "yii-extension",
 	"require": {
-        	"php": ">=5.0.0",
-            "phpmailer/phpmailer": "5.2.*"
+		"php": ">=5.0.0",
+		"phpmailer/phpmailer": "5.2.*"
 	}
 }
