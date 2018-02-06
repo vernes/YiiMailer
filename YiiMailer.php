@@ -27,6 +27,7 @@
  * @version 1.6, 2014-07-09
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
 
 class YiiMailer extends PHPMailer
 {
@@ -36,12 +37,6 @@ class YiiMailer extends PHPMailer
      * @var string
      */
     public $CharSet = 'UTF-8';
-
-    /**
-     * Sets the text-only body of the message.
-     * @var string
-     */
-    public $AltBody = '';
 
     /**
      * Default paths and private properties
@@ -323,7 +318,7 @@ class YiiMailer extends PHPMailer
      */
     public function setFrom($address, $name = '', $auto = true)
     {
-        return parent::SetFrom($address, $name, (int)$auto);
+        return parent::setFrom($address, $name, (bool)$auto);
     }
 
     /**
@@ -337,7 +332,7 @@ class YiiMailer extends PHPMailer
      */
     public function setTo($addresses)
     {
-        $this->ClearAddresses();
+        $this->clearAddresses();
         return $this->setAddresses('to', $addresses);
     }
 
@@ -348,7 +343,7 @@ class YiiMailer extends PHPMailer
      */
     public function setCc($addresses)
     {
-        $this->ClearCCs();
+        $this->clearCCs();
         return $this->setAddresses('cc', $addresses);
     }
 
@@ -359,7 +354,7 @@ class YiiMailer extends PHPMailer
      */
     public function setBcc($addresses)
     {
-        $this->ClearBCCs();
+        $this->clearBCCs();
         return $this->setAddresses('bcc', $addresses);
     }
 
@@ -370,7 +365,7 @@ class YiiMailer extends PHPMailer
      */
     public function setReplyTo($addresses)
     {
-        $this->ClearReplyTos();
+        $this->clearReplyTos();
         return $this->setAddresses('Reply-To', $addresses);
     }
 
@@ -389,9 +384,9 @@ class YiiMailer extends PHPMailer
         $result = true;
         foreach ($addresses as $key => $value) {
             if (is_int($key))
-                $r = $this->AddAnAddress($type, $value);
+                $r = $this->addAnAddress($type, $value);
             else
-                $r = $this->AddAnAddress($type, $key, $value);
+                $r = $this->addAnAddress($type, $key, $value);
             if ($result && !$r)
                 $result = false;
         }
@@ -434,9 +429,9 @@ class YiiMailer extends PHPMailer
         $result = true;
         foreach ($attachments as $key => $value) {
             if (is_int($key))
-                $r = $this->AddAttachment($value);
+                $r = $this->addAttachment($value);
             else
-                $r = $this->AddAttachment($key, $value);
+                $r = $this->addAttachment($key, $value);
             if ($result && !$r)
                 $result = false;
         }
@@ -449,9 +444,9 @@ class YiiMailer extends PHPMailer
      */
     public function clear()
     {
-        $this->ClearAllRecipients();
-        $this->ClearReplyTos();
-        $this->ClearAttachments();
+        $this->clearAllRecipients();
+        $this->clearReplyTos();
+        $this->clearAttachments();
     }
 
     /**
@@ -543,7 +538,7 @@ class YiiMailer extends PHPMailer
      */
     protected function MsgHTMLWithLayout($message, $basedir = '')
     {
-        $this->MsgHTML($this->renderView($this->layoutPath . '.' . $this->layout, array('content' => $message, 'data' => $this->data)), $basedir);
+        $this->msgHTML($this->renderView($this->layoutPath . '.' . $this->layout, array('content' => $message, 'data' => $this->data)), $basedir);
     }
 
     /**
@@ -558,17 +553,17 @@ class YiiMailer extends PHPMailer
         //send the message
         try {
             //prepare the message
-            if (!$this->PreSend())
+            if (!$this->preSend())
                 return false;
 
             //in test mode, save message as a file
             if ($this->testMode)
                 return $this->save();
             else
-                return $this->PostSend();
-        } catch (phpmailerException $e) {
+                return $this->postSend();
+        } catch (Exception $e) {
             $this->mailHeader = '';
-            $this->SetError($e->getMessage());
+            $this->setError($e->getMessage());
             if ($this->exceptions) {
                 throw $e;
             }
@@ -597,12 +592,12 @@ class YiiMailer extends PHPMailer
 
         try {
             $file = fopen($dir . DIRECTORY_SEPARATOR . $filename, 'w+');
-            fwrite($file, $this->GetSentMIMEMessage());
+            fwrite($file, $this->getSentMIMEMessage());
             fclose($file);
 
             return true;
         } catch (Exception $e) {
-            $this->SetError($e->getMessage());
+            $this->setError($e->getMessage());
 
             return false;
         }
