@@ -13,8 +13,8 @@ Yii (v1.1.x) extension for sending emails with layouts using [PHPMailer](https:/
 
 
 ## Installation
-1. Copy YiiMailer folder to protected/extensions
-2. Add 'ext.YiiMailer.YiiMailer' line to your imports in main and/or console yii config
+1. Install with composer: `composer require rdewilde/yiimailer`
+2. Add 'vendor.rdewilde.yiimailer.YiiMailer' line to your imports in main and/or console yii config
 3. Copy mail.php config file to protected/config or add configuration array in 'params' under the key 'YiiMailer'
 4. Create email layout file mail.php in protected/views/layouts/ (default path, can be changed in config)
 5. Create all the views you want to use in protected/views/mail/ (default path, can be changed in config)

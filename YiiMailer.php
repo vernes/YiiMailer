@@ -24,7 +24,7 @@
  * @author Vernes Šiljegović
  * @copyright  Copyright (c) 2014 YiiMailer
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version 1.6, 2014-07-09
+ * @version 2.0.0, 2018-02-06
  */
 
 use PHPMailer\PHPMailer\PHPMailer;
